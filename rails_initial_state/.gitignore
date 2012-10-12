@@ -1,0 +1,10 @@
+.bundle
+.jhw*
+jhw*
+log/*.log
+tmp/
+.powrc
+*~
+**/*~
+public/assets/
+.sass-cache/
