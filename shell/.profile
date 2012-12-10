@@ -1,3 +1,5 @@
+OS=`uname`
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
 export REDISTOGO_URL='redis://localhost:6379'
@@ -5,7 +7,12 @@ export REDISTOGO_URL='redis://localhost:6379'
 export ANDROID_HOME="/usr/share/android-sdk-macosx"
 
 alias h='history'
-alias ls='ls -G'
+
+if [ $OS == "Linux" ]; then
+  alias ls='ls --color'
+else
+  alias ls='ls -G'
+fi
 
 alias d='git difftool'
 alias gst='git status'
