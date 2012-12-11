@@ -1,0 +1,35 @@
+[gui]
+    recentrepo = /Users/davedesrochers/Documents/ShopTap/shoptap-server
+[user]
+    name = Dave Desrochers
+    email = <dave726@gmail.com>
+[diff]
+    tool = opendiff
+[difftool]
+    prompt = false
+[alias]
+    co = checkout
+    ci = commit
+[heroku]
+    account = personal
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    interactive = auto
+    ui = true
+    pager = true
+[color "status"]
+    added = green
+    changed = yellow
+    untracked = red
+    new = green
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
