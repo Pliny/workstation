@@ -20,6 +20,7 @@ alias gbr='git branch'
 gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -$LINE --graph --pretty='%h %Cblue%an %ai %C(yellow) %s'; }
 
 alias tw='task'
+alias twc='task complete rc.report.complete.sort=Complete project:Morse'
 
 alias restart_guard='launchctl stop com.shoptap.guard'
 alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.shoptap.guard.plist'
