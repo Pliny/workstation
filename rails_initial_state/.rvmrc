@@ -1,1 +1,1 @@
-rvm --create ruby-1.9.3-p125@your-project-name-here
+rvm --create ruby-1.9.3-p327@your-project-name-here
