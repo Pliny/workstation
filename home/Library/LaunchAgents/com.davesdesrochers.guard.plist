@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- There should be a link to this file in ~/Library/LaunchAgents -->
+<!-- You need you modify this file to match your user name and paths -->
+<plist version="1.0">
+  <dict>
+    <key>KeepAlive</key>
+    <true/>
+    <key>Label</key>
+    <string>com.davesdesrochers.guard</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/Users/ddesrochers/bin/guard.sh</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/ddesrochers/Documents/misc/score-tracker</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/guard.stderr</string>
+    <key>StandardOutPath</key>
+    <string>/tmp/guard.stdout</string>
+    <key>RunAtLoad</key>
+    <true></true>
+    <key>UserName</key>
+    <string>ddesrochers</string>
+  </dict>
+</plist>
+

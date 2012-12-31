@@ -22,9 +22,9 @@ gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -
 alias tw='task'
 alias twc='task complete rc.report.complete.sort=Complete project:Morse'
 
-alias restart_guard='launchctl stop com.shoptap.guard'
-alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.shoptap.guard.plist'
-alias start_guard='launchctl load -w ~/Library/LaunchAgents/com.shoptap.guard.plist'
+alias restart_guard='launchctl stop com.davesdesrochers.guard'
+alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
+alias start_guard='rm -f /tmp/guard.std*; launchctl load -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
 
 PS1='\[\e[1;32m\]\h:[\T][\!]:\w\$ >\[\e[0m\] '
 PS2='> '
