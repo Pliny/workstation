@@ -115,11 +115,11 @@ elif [ $OSBACKUP -eq 1 ]; then
   fi
 fi
 
-# # ################## Last, unmount everything ##########################
-# if [ $UMOUNT -eq 1 ]; then
-#   echo "`date`: /bin/umount $BACKUPDIR" >> $LOG
-#   /bin/umount $BACKUPDIR  >> $LOG 2>&1 3>&1
-#   if [ "$?" != "0" ]; then
-#     echo "`date`: ERROR: Could not unmount device at $BACKUPDIR" >> $LOG;
-#   fi
-# fi
+# ################## Last, unmount everything ##########################
+if [ $UMOUNT -eq 1 ]; then
+  echo "`date`: /bin/umount $BACKUPDIR" >> $LOG
+  /bin/umount $BACKUPDIR  >> $LOG 2>&1 3>&1
+  if [ "$?" != "0" ]; then
+    echo "`date`: ERROR: Could not unmount device at $BACKUPDIR" >> $LOG;
+  fi
+fi
