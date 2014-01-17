@@ -13,7 +13,6 @@ OSDIR="$USBDIR/OS/Chunky2"
 MEDDIR="$USBDIR/Media"
 
 # CLI Argument defaults
-MOUNT=0;
 UMOUNT=0;
 BACKUP=0;
 USBMOUNT=0;
@@ -62,31 +61,6 @@ if [ $USBMOUNT -eq 1 ]; then
   if [ "$?" != "0" ]; then
     echo "`date`: ERROR: Could not mount usb device $UUID to $USBDIR" >> $LOG;
   fi
-
-elif [ $MOUNT -eq 1 ]; then
-  # SAMBA
-  if [ "$MAINDIR" == "$SAMBADIR" ]; then
-    /sbin/mount -t smbfs -o user=dave,password=jambony1 \\\\router\\Default $MAINDIR >> $LOG 2>&1 3>&1
-    if [ "$?" != "0" ]; then
-      echo "`date`: ERROR: Could not mount hard drive via samba" >> $LOG
-      exit 1
-    fi
-  fi
-  # LOOP DEVICES
-  for ((I=0; I<$LOOPDISKS; I++)); do
-    /bin/mkdir -p $LOOPDIR/disk$I;
-    /sbin/mount -t ext3 -o loop=/dev/loop$I $MAINDIR/os/chunky/disk$I.raw $LOOPDIR/disk$I >> $LOG 2>&1 3>&1
-    if [ "$?" != "0" ]; then
-      echo "`date`: ERROR: Could not mount loop device $I" >> $LOG
-      exit 2
-    fi
-  done
-  # MOUNT COMBINED LOOP DEVICES
-  /usr/local/bin/mhddfs $LOOPDIR/disk* $FUSEDIR >> $LOG 2>&1 3>&1
-  if [ "$?" != "0" ]; then
-    echo "`date`: ERROR: Could not mount fuse device via mhddfs" >> $LOG
-    exit 3
-  fi
 fi
 
 ######################## Backup #######################################
@@ -114,32 +88,5 @@ if [ $USBUMOUNT -eq 1 ]; then
   /sbin/umount $USBDIR  >> $LOG 2>&1 3>&1
   if [ "$?" != "0" ]; then
     echo "`date`: ERROR: Could not unmount usb device at $USBDIR" >> $LOG;
-  fi
-
-elif [ $UMOUNT -eq 1 ]; then
-  sleep 1;
-  # UNMOUNT COMBINED LOOP DEVICES
-  /sbin/umount $FUSEDIR >> $LOG 2>&1 3>&1
-  if [ "$?" != "0" ]; then
-    echo "`date`: ERROR: Could not unmount fuse device" >> $LOG
-    #exit 4
-  fi
-  sleep 1
-  # UNMOUNT LOOP DEVICES
-  for ((I=0; I<$LOOPDISKS; I++)); do
-    /sbin/umount -d $LOOPDIR/disk$I >> $LOG 2>&1 3>&1
-    if [ "$?" != "0" ]; then
-      echo "`date`: ERROR: Could not umount loop device $I" >> $LOG
-      #exit 5
-    fi
-  done
-  sleep 1
-  # UNMOUNT SAMBA
-  if [ "$MAINDIR" == "$SAMBADIR" ]; then
-    /sbin/umount $MAINDIR >> $LOG 2>&1 3>&1
-    if [ "$?" != "0" ]; then
-      echo "`date`: ERROR: Could not umount hard drive via samba" >> $LOG
-      #exit 6
-    fi
   fi
 fi
