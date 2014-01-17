@@ -62,7 +62,7 @@ while [ $# -gt 0 ]; do
       ;;
     -m|--media )
       MEDIABACKUP=1;
-      LOG=$LOGPATH/OS.log
+      LOG=$LOGPATH/Media.log
       ;;
     -dm|--debugmount )
       UMOUNT=0;
