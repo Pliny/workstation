@@ -1,0 +1,35 @@
+
+#
+# Log files location
+#
+LOGPATH="/var/log/backup/"
+
+#
+# Directory where the backup drive is mounted
+#
+BACKUPDIR="/mnt/backup"
+
+#
+# UUID of backup drive
+#
+UUID="3a0d8332-8c96-4160-83a0-48e369955c1d"
+
+#
+# Path to backup the OS files
+#
+OSDIR="$BACKUPDIR/OS/Chunky2"
+
+#
+# Path to backup the media files
+#
+MEDDIR="$BACKUPDIR/Media"
+
+#
+# File containing directories/files to exclude for OS backup
+#
+OS_EXCLUDE_FILE="/etc/os-backup-exclude.conf"
+
+#
+# File containing directories/files to exclude for Media backup
+#
+MEDIA_EXCLUDE_FILE="/etc/media-backup-exclude.conf"
