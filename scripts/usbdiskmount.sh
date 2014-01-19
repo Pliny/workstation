@@ -29,20 +29,41 @@
 
 . /etc/config/usbdiskmount
 
+# Keep in mind this is a running log file
+[ -d $LOGPATH ] || mkdir -p $LOGPATH
+LOG=$LOGPATH/usbdiskmount.log
+
+# Make sure we're not running as root
+if [ "$(id -u)" == "0" ]; then
+  echo "This script should not be running as root" 1>&2
+  exit 1
+fi
+
+function usage() {
+  echo 1>&2 Usage: $0 "{/dev/diskIdPartitionId}"
+  echo 1>&2 "Backs up your media files.. with sound!"
+}
+
+function media_backup() {
+  /usr/bin/rsync -avL --delete --delete-excluded --human-readable \
+    --exclude-from $MEDIA_EXCLUDE_FILE \
+    /media/* "$DRIVE_MOUNTPOINT/media" >> $LOG 2>&1 3>&1
+}
+
 function play
 {
   case $1 in
     "INSERT" )
-      /usr/local/bin/mplayer -ao oss -really-quiet $SNDPATH/usbdisk_insert.wav
+      $SNDPLAYER $SNDPATH/usbdisk_insert.wav
       ;;
     "FAIL" )
-      /usr/local/bin/mplayer -ao oss -really-quiet $SNDPATH/usbdisk_fail.wav
+      $SNDPLAYER $SNDPATH/usbdisk_fail.wav
       ;;
     "REMOVE" )
-      /usr/local/bin/mplayer -ao oss -really-quiet $SNDPATH/usbdisk_remove.wav
+      $SNDPLAYER $SNDPATH/usbdisk_remove.wav
       ;;
     *)
-      echo "`date`: Error, bad argument in play() function, aborting." 2>&1 >> $LOG;
+      echof "Error, bad argument in play() function, aborting.";
       ;;
   esac
 }
@@ -54,6 +75,11 @@ function get-uuid
   sed 's_[^#]* \([^#]*\) ->[^#]*_\1_'
 }
 
+function echof
+{
+  echo "`date`: $1" 2>&1 >> $LOG
+}
+
 ## Backup get-uuid in case something gets effed with udev
 function get-uuid2
 {
@@ -61,72 +87,70 @@ function get-uuid2
 }
 
 
-drive_kernel="$1"
-drive_uuid=`get-uuid "$drive_kernel"`
+# Local Variables
+DRIVE_KERNEL="$1"
+DRIVE_UUID=$(get-uuid "$DRIVE_KERNEL")
 
 echo "" >> $LOG
 echo "---------------------------------------------------------------------" >> $LOG
 
-if [ "$drive_kernel" == '' ]
+# Error checking
+if [ "$DRIVE_KERNEL" == '' ]
 then
   play "FAIL"
-  echo "`date`: Error defining \$drive_kernel on $1, aborting." 2>&1 >> $LOG
+  echof "Error defining \$DRIVE_KERNEL on $DRIVE_KERNEL, aborting."
   exit 1
 fi
-if [ "$drive_uuid" == '' ]
+if [ "$DRIVE_UUID" == '' ]
 then
   play "FAIL"
-  echo "`date`: Error defining \$drive_uuid on $1, aborting." 2>&1 >> $LOG
-  exit 1
-fi
-
-drive_devicepath="/dev/$drive_kernel"
-if [ "$drive_devicepath" == '' ]
-then
-  play "FAIL"
-  echo "`date`: Error defining \$drive_devicepath on $1, aborting." 2>&1 >> $LOG
+  echof "Error defining \$DRIVE_UUID on $DRIVE_KERNEL, aborting."
   exit 1
 fi
 
-echo "`date`: Attempting to mount $1" 2>&1 >> $LOG
-/usr/bin/pmount $drive_devicepath 2>&1 >> $LOG
+DRIVE_DEVICEPATH="/dev/$DRIVE_KERNEL"
+if [ "$DRIVE_DEVICEPATH" == '' ]
+then
+  play "FAIL"
+  echof "Error defining \$DRIVE_DEVICEPATH on $DRIVE_KERNEL, aborting."
+  exit 1
+fi
+
+echof "Attempting to mount $DRIVE_KERNEL"
+/usr/bin/pmount $POPTS $DRIVE_DEVICEPATH 2>&1 >> $LOG
 if [ "$?" != "0" ]
 then
   play "FAIL"
-  echo "`date`: Failed to mount" 2>&1 >> $LOG
+  echof "Failed to mount"
   exit 1
 fi
 sleep 1s
-drive_mountpoint=`df | grep "^/dev/$drive_kernel" | awk '{print $6}'`
-if [ "$drive_mountpoint" == '' ]
+DRIVE_MOUNTPOINT=`df | grep "^/dev/$DRIVE_KERNEL" | awk '{print $6}'`
+if [ "$DRIVE_MOUNTPOINT" == '' ]
 then
   play "FAIL"
-  echo "Error defining \$drive_mountpoint, aborting." >&2
+  echof "Error defining \$DRIVE_MOUNTPOINT, aborting."
   exit 1
-fi 
+fi
 
 
 play "INSERT"
-echo "`date`: sucessfully mounted $1" 2>&1 >> $LOG
-if [ "$drive_uuid" == "$MY_DRIVE_UUID" ]
-then
+echof "sucessfully mounted $DRIVE_KERNEL"
+if [ "$DRIVE_UUID" == "$MY_DRIVE_UUID" ]; then
 
   sleep 1s
-  /usr/bin/rsync -avL --delete --delete-excluded  \
-    --exclude tmp/                             \
-    --exclude video/mythtv/                    \
-    /mnt/media/* "$drive_mountpoint/media" 2>&1 >> $LOG && \
+  $(media_backup) && \
+    echof "sucessfully backed up media files on $DRIVE_KERNEL.. unmounting.."
 
-    echo "`date`: sucessfully backed up media files on $1.. unmounting.." 2>&1 >> $LOG
-
-  /usr/bin/pumount $drive_mountpoint
-  if [ "$?" != "0" ]
-  then
-    echo "`date`: Could not unmount $1. You must unmount manually" 2>&1 >> $LOG
+  sleep 1s
+  /usr/bin/pumount $DRIVE_MOUNTPOINT
+  if [ "$?" != "0" ]; then
+    echof "Could not unmount $DRIVE_MOUNTPOINT. You must unmount manually"
   else
     play "REMOVE"
   fi
 fi
 
+echof "DONE"
 
-exit $?  
+exit $?
