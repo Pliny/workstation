@@ -27,9 +27,9 @@ MEDDIR="$BACKUPDIR/Media"
 #
 # File containing directories/files to exclude for OS backup
 #
-OS_EXCLUDE_FILE="/etc/os-backup-exclude.conf"
+OS_EXCLUDE_FILE="/etc/backup/os-backup-exclude.conf"
 
 #
 # File containing directories/files to exclude for Media backup
 #
-MEDIA_EXCLUDE_FILE="/etc/media-backup-exclude.conf"
+MEDIA_EXCLUDE_FILE="/etc/backup/media-backup-exclude.conf"
