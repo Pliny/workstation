@@ -1,0 +1,8 @@
+[Unit]
+Description=DSD: Service to back up my media files
+
+[Service]
+User=dave
+Group=users
+Type=oneshot
+ExecStart=/usr/local/bin/usbdiskmount.sh %i
