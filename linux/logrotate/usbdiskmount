@@ -1,0 +1,6 @@
+/home/dave/.usbdiskmount/*.log {
+   create 644 dave users
+   notifempty
+   missingok
+   compress
+}

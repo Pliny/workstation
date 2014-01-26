@@ -9,14 +9,16 @@ RELOAD_UDEV          := udevadm control --reload
 SYSTEMCTL_PROGRAM    := systemctl
 
 
-######## Programs
+######## Files to Install
 
 BACKUP_SH            := backup.sh
 BACKUP_CONFIG        := backup
+BACKUP_LOGROTATE     := backup
 USBDISKMOUNT_SH      := usbdiskmount.sh
 USBDISKMOUNT_CONFIG  := usbdiskmount
 USBDISKMOUNT_SYSTEMD := usbdiskmount@.service
 USBDISKMOUNT_UDEV    := usbdiskmount.rules
+USBDISKMOUNT_LOGROTATE := usbdiskmount
 PHP_CGI_SYSTEMD      := php-cgi.service
 XORG_SYSTEMD         := xorg.service
 
@@ -28,6 +30,7 @@ BIN_PATH             := $(INSTALL_ROOT)/usr/local/bin/
 CONFIG_PATH          := $(INSTALL_ROOT)/etc/config/
 SYSTEMD_PATH         := $(INSTALL_ROOT)/usr/local/lib/systemd/system
 UDEV_PATH            := $(INSTALL_ROOT)/etc/udev/rules.d/
+LOGROTATE_PATH       := $(INSTALL_ROOT)/etc/logrotate.d/
 
 ####### USBDISKMOUNT
 USBDISKMOUNT_AUDIO_PATH := $(INSTALL_ROOT)/usr/local/share/usbdiskmount
@@ -47,6 +50,7 @@ install_backup:
 	@$(CHK_DIR_EXISTS) $(CONFIG_PATH) || $(MKDIR) $(CONFIG_PATH)
 	$(INSTALL_PROGRAM) "$(BACKUP_SH)"     $(SBIN_PATH)
 	$(INSTALL_CONFIG) "config/$(BACKUP_CONFIG)" $(CONFIG_PATH)
+	$(INSTALL_CONFIG) "logrotate/$(BACKUP_LOGROTATE)" $(LOGROTATE_PATH)
 
 install_usbdiskmount:
 	@$(CHK_DIR_EXISTS) $(BIN_PATH)     || $(MKDIR) $(BIN_PATH)
@@ -57,8 +61,9 @@ install_usbdiskmount:
 	@$(CHK_DIR_EXISTS) $(USBDISKMOUNT_AUDIO_PATH)    || $(MKDIR) $(USBDISKMOUNT_AUDIO_PATH)
 	$(INSTALL_PROGRAM) "$(USBDISKMOUNT_SH)"      $(BIN_PATH)
 	$(INSTALL_CONFIG) "config/$(USBDISKMOUNT_CONFIG)"  $(CONFIG_PATH)
-	$(INSTALL_CONFIG) "systemd/system/$(USBDISKMOUNT_SYSTEMD)" $(SYSTEMD_PATH)
+	$(INSTALL_CONFIG) "logrotate/$(USBDISKMOUNT_LOGROTATE)" $(LOGROTATE_PATH)
 	$(INSTALL_CONFIG) "udev/rules.d/$(USBDISKMOUNT_UDEV)"    $(UDEV_PATH)
+	$(INSTALL_CONFIG) "systemd/system/$(USBDISKMOUNT_SYSTEMD)" $(SYSTEMD_PATH)
 	$(INSTALL_CONFIG) "share/usbdiskmount/$(INSERT_SND)" $(USBDISKMOUNT_AUDIO_PATH)
 	$(INSTALL_CONFIG) "share/usbdiskmount/$(FAIL_SND)"   $(USBDISKMOUNT_AUDIO_PATH)
 	$(INSTALL_CONFIG) "share/usbdiskmount/$(REMOVE_SND)" $(USBDISKMOUNT_AUDIO_PATH)
@@ -82,6 +87,7 @@ install_xorg:
 uninstall_backup:
 	-$(DEL_FILE)  $(SBIN_PATH)/$(BACKUP_SH)
 	-$(DEL_FILE)  $(CONFIG_PATH)/$(BACKUP_CONFIG)
+	-$(DEL_FILE)  $(LOGROTATE_PATH)/$(BACKUP_LOGROTATE)
 	-$(DEL_DIR)   $(SBIN_PATH)
 	-$(DEL_DIR)   $(CONFIG_PATH)
 
@@ -90,6 +96,7 @@ uninstall_usbdiskmount:
 	-$(DEL_FILE)  $(CONFIG_PATH)/$(USBDISKMOUNT_CONFIG)
 	-$(DEL_FILE)  $(SYSTEMD_PATH)/$(USBDISKMOUNT_SYSTEMD)
 	-$(DEL_FILE)  $(UDEV_PATH)/$(USBDISKMOUNT_UDEV)
+	-$(DEL_FILE)  $(LOGROTATE_PATH)/$(USBDISKMOUNT_LOGROTATE)
 	-$(DEL_DIR)   $(BIN_PATH)
 	-$(DEL_DIR)   $(CONFIG_PATH)
 	@echo "Reloading udev..."
