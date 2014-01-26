@@ -1,0 +1,15 @@
+[Unit]
+Description=DSD: Start the X-Server
+Conflicts=rescue.target
+
+[Service]
+Restart=always
+RestartSec=0
+Type=simple
+User=dave
+Group=users
+PIDFile=/var/run/xorg.pid
+ExecStart=/usr/bin/startx
+
+[Install]
+WantedBy=graphical.target
