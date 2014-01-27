@@ -10,6 +10,7 @@
 
 [Unit]
 Description=DSD: The X-Server
+After=systemd-user-sessions.service
 Conflicts=rescue.target
 
 [Service]
