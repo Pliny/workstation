@@ -11,9 +11,10 @@ User=dave
 Group=users
 Environment=HOME=/home/dave
 StandardOutput=null
-ExecStart=/usr/local/bin/mythbackend --logpath /var/log/mythtv --loglevel warning
-ExecReload=/bin/kill -INT $MAINPID
-ExecStop=/bin/kill -INT $MAINPID
+
+ExecStart=/usr/local/bin/mythbackend --logpath /var/log/mythtv --loglevel info
+KillMode=process
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target

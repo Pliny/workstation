@@ -2,6 +2,7 @@
 Description=DSD: MythTV Frontend Service
 After=xorg.service mythbackend.service
 Requires=mythbackend.service
+Wants=xorg.service
 
 [Service]
 Restart=always
@@ -11,9 +12,10 @@ User=dave
 Group=users
 Environment=HOME=/home/dave
 StandardOutput=null
-ExecStart=/usr/local/bin/mythfrontend -display :0.0 --logpath /var/log/mythtv --loglevel warning
-ExecReload=/bin/kill -INT $MAINPID
-ExecStop=/bin/kill -INT $MAINPID
+
+ExecStart=/usr/local/bin/mythfrontend -display :0.0 --logpath /var/log/mythtv --loglevel info
+KillMode=process
+KillSignal=SIGINT
 
 [Install]
 WantedBy=graphical.target

@@ -45,9 +45,9 @@ FAIL_SND                := usbdisk_fail.wav
 
 
 
-install:     install_backup   install_usbdiskmount   install_php_cgi   install_xorg
+install:     install_backup   install_usbdiskmount   install_php_cgi   install_xorg   install_mythtv
 
-uninstall: uninstall_backup uninstall_usbdiskmount uninstall_php_cgi uninstall_xorg
+uninstall: uninstall_backup uninstall_usbdiskmount uninstall_php_cgi uninstall_xorg uninstall_mythtv
 
 
 install_backup:
