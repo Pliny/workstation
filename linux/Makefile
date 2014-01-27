@@ -21,6 +21,9 @@ USBDISKMOUNT_UDEV    := usbdiskmount.rules
 USBDISKMOUNT_LOGROTATE := usbdiskmount
 PHP_CGI_SYSTEMD      := php-cgi.service
 XORG_SYSTEMD         := xorg.service
+MYTHBACKEND_SYSTEMD  := mythbackend.service
+MYTHFRONTEND_SYSTEMD := mythfrontend.service
+MYTHTV_LOGROTATE     := mythtv
 
 
 ######## Paths
@@ -31,6 +34,7 @@ CONFIG_PATH          := $(INSTALL_ROOT)/etc/config/
 SYSTEMD_PATH         := $(INSTALL_ROOT)/usr/local/lib/systemd/system
 UDEV_PATH            := $(INSTALL_ROOT)/etc/udev/rules.d/
 LOGROTATE_PATH       := $(INSTALL_ROOT)/etc/logrotate.d/
+MYTHTV_LOG_PATH      := $(INSTALL_ROOT)/var/log/mythtv/
 
 ####### USBDISKMOUNT
 USBDISKMOUNT_AUDIO_PATH := $(INSTALL_ROOT)/usr/local/share/usbdiskmount
@@ -46,8 +50,9 @@ uninstall: uninstall_backup uninstall_usbdiskmount uninstall_php_cgi uninstall_x
 
 
 install_backup:
-	@$(CHK_DIR_EXISTS) $(SBIN_PATH)   || $(MKDIR) $(SBIN_PATH)
-	@$(CHK_DIR_EXISTS) $(CONFIG_PATH) || $(MKDIR) $(CONFIG_PATH)
+	@$(CHK_DIR_EXISTS) $(SBIN_PATH)      || $(MKDIR) $(SBIN_PATH)
+	@$(CHK_DIR_EXISTS) $(CONFIG_PATH)    || $(MKDIR) $(CONFIG_PATH)
+	@$(CHK_DIR_EXISTS) $(LOGROTATE_PATH) || $(MKDIR) $(LOGROTATE_PATH)
 	$(INSTALL_PROGRAM) "$(BACKUP_SH)"     $(SBIN_PATH)
 	$(INSTALL_CONFIG) "config/$(BACKUP_CONFIG)" $(CONFIG_PATH)
 	$(INSTALL_CONFIG) "logrotate/$(BACKUP_LOGROTATE)" $(LOGROTATE_PATH)
@@ -57,8 +62,8 @@ install_usbdiskmount:
 	@$(CHK_DIR_EXISTS) $(CONFIG_PATH)  || $(MKDIR) $(CONFIG_PATH)
 	@$(CHK_DIR_EXISTS) $(SYSTEMD_PATH) || $(MKDIR) $(SYSTEMD_PATH)
 	@$(CHK_DIR_EXISTS) $(UDEV_PATH)    || $(MKDIR) $(UDEV_PATH)
-	@$(CHK_DIR_EXISTS) $(UDEV_PATH)    || $(MKDIR) $(UDEV_PATH)
-	@$(CHK_DIR_EXISTS) $(USBDISKMOUNT_AUDIO_PATH)    || $(MKDIR) $(USBDISKMOUNT_AUDIO_PATH)
+	@$(CHK_DIR_EXISTS) $(LOGROTATE_PATH) || $(MKDIR) $(LOGROTATE_PATH)
+	@$(CHK_DIR_EXISTS) $(USBDISKMOUNT_AUDIO_PATH) || $(MKDIR) $(USBDISKMOUNT_AUDIO_PATH)
 	$(INSTALL_PROGRAM) "$(USBDISKMOUNT_SH)"      $(BIN_PATH)
 	$(INSTALL_CONFIG) "config/$(USBDISKMOUNT_CONFIG)"  $(CONFIG_PATH)
 	$(INSTALL_CONFIG) "logrotate/$(USBDISKMOUNT_LOGROTATE)" $(LOGROTATE_PATH)
@@ -82,6 +87,18 @@ install_xorg:
 	$(INSTALL_CONFIG) "systemd/system/$(XORG_SYSTEMD)" $(SYSTEMD_PATH)
 	@echo "Enabling $(XORG_SYSTEMD), however you should manually start it yourself..."
 	$(SYSTEMCTL_PROGRAM) enable $(XORG_SYSTEMD)
+
+install_mythtv:
+	@$(CHK_DIR_EXISTS) $(LOGROTATE_PATH)  || $(MKDIR) $(LOGROTATE_PATH)
+	@$(CHK_DIR_EXISTS) $(MYTHTV_LOG_PATH) || $(MKDIR) $(MYTHTV_LOG_PATH)
+	$(INSTALL_CONFIG) "logrotate/$(MYTHTV_LOGROTATE)" $(LOGROTATE_PATH)
+	$(INSTALL_CONFIG) "systemd/system/$(MYTHBACKEND_SYSTEMD)" $(SYSTEMD_PATH)
+	@echo "Enabling $(MYTHBACKEND_SYSTEMD), however you should manually start it yourself..."
+	$(SYSTEMCTL_PROGRAM) enable $(MYTHBACKEND_SYSTEMD)
+	$(INSTALL_CONFIG) "systemd/system/$(MYTHFRONTEND_SYSTEMD)" $(SYSTEMD_PATH)
+	@echo "Enabling $(MYTHFRONTEND_SYSTEMD), however you should manually start it yourself..."
+	$(SYSTEMCTL_PROGRAM) enable $(MYTHFRONTEND_SYSTEMD)
+
 
 
 uninstall_backup:
@@ -113,3 +130,14 @@ uninstall_xorg:
 	$(SYSTEMCTL_PROGRAM) stop $(XORG_SYSTEMD)
 	$(SYSTEMCTL_PROGRAM) disable $(XORG_SYSTEMD)
 	-$(DEL_FILE)  $(SYSTEMD_PATH)/$(XORG_SYSTEMD)
+
+uninstall_mythtv:
+	@echo "Disabling $(MYTHBACKEND_SYSTEMD)..."
+	$(SYSTEMCTL_PROGRAM) stop $(MYTHBACKEND_SYSTEMD)
+	$(SYSTEMCTL_PROGRAM) disable $(MYTHBACKEND_SYSTEMD)
+	@echo "Disabling $(MYTHFRONTEND_SYSTEMD)..."
+	$(SYSTEMCTL_PROGRAM) stop $(MYTHFRONTEND_SYSTEMD)
+	$(SYSTEMCTL_PROGRAM) disable $(MYTHFRONTEND_SYSTEMD)
+	-$(DEL_FILE) $(SYSTEMD_PATH)/$(MYTHBACKEND_SYSTEMD)
+	-$(DEL_FILE) $(SYSTEMD_PATH)/$(MYTHFRONTEND_SYSTEMD)
+	-$(DEL_FILE) $(LOGROTATE_PATH)/$(MYTHTV_LOGROTATE)

@@ -1,0 +1,6 @@
+/var/log/mythtv/*.log {
+   create 644 dave users
+   notifempty
+   missingok
+   compress
+}
