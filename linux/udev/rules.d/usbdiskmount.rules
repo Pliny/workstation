@@ -2,6 +2,6 @@ ACTION!="add" GOTO="dsd_usb_mount_end"
 
 SUBSYSTEMS=="usb", ATTRS{serial}=="575847304139393933303538", SYMLINK+="wd_passport%n"
 # SUBSYSTEMS=="usb", KERNEL=="sd??",  RUN+="/bin/su dave -c '/usr/local/bin/usbdiskmount.sh $kernel &'"
-SUBSYSTEMS=="usb", KERNEL=="sd??", ENV{SYSTEMD_WANTS}+="usbdiskmount@$kernel.service"
+SUBSYSTEMS=="usb", ATTRS{serial}=="575847304139393933303538", KERNEL=="sd??", ENV{SYSTEMD_WANTS}+="usbdiskmount@$kernel.service"
 
 LABEL="dsd_usb_mount_end"
