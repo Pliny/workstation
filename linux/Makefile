@@ -24,6 +24,7 @@ XORG_SYSTEMD         := xorg.service
 MYTHBACKEND_SYSTEMD  := mythbackend.service
 MYTHFRONTEND_SYSTEMD := mythfrontend.service
 MYTHTV_LOGROTATE     := mythtv
+XORGLOGIN_SH         := xorglogin.sh
 
 
 ######## Paths
@@ -83,7 +84,9 @@ install_php_cgi:
 	$(SYSTEMCTL_PROGRAM) start $(PHP_CGI_SYSTEMD)
 
 install_xorg:
+	@$(CHK_DIR_EXISTS) $(SBIN_PATH)    || $(MKDIR) $(SBIN_PATH)
 	@$(CHK_DIR_EXISTS) $(SYSTEMD_PATH) || $(MKDIR) $(SYSTEMD_PATH)
+	$(INSTALL_PROGRAM) $(XORGLOGIN_SH) $(SBIN_PATH)
 	$(INSTALL_CONFIG) "systemd/system/$(XORG_SYSTEMD)" $(SYSTEMD_PATH)
 	@echo "Enabling $(XORG_SYSTEMD), however you should manually start it yourself..."
 	$(SYSTEMCTL_PROGRAM) enable $(XORG_SYSTEMD)
@@ -130,6 +133,7 @@ uninstall_xorg:
 	$(SYSTEMCTL_PROGRAM) stop $(XORG_SYSTEMD)
 	$(SYSTEMCTL_PROGRAM) disable $(XORG_SYSTEMD)
 	-$(DEL_FILE)  $(SYSTEMD_PATH)/$(XORG_SYSTEMD)
+	-$(DEL_FILE)  $(SBIN_PATH)/$(XORGLOGIN_SH)
 
 uninstall_mythtv:
 	@echo "Disabling $(MYTHBACKEND_SYSTEMD)..."
