@@ -1,0 +1,20 @@
+[Unit]
+Description=DSD: MythTV Backend Service
+After=network.target mysqld.service chrony.service
+Wants=nginx.service
+
+[Service]
+Restart=always
+RestartSec=5
+Type=simple
+User=dave
+Group=users
+Environment=HOME=/home/dave
+StandardOutput=null
+
+ExecStart=/usr/local/bin/mythbackend --logpath /var/log/mythtv --loglevel info
+KillMode=process
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

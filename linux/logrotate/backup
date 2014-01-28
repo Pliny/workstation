@@ -1,0 +1,6 @@
+/var/log/backup/*.log {
+   create 644 root root
+   notifempty
+   missingok
+   compress
+}

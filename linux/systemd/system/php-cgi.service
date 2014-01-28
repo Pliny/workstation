@@ -1,0 +1,13 @@
+[Unit]
+Description=PHP FastCfg daemon
+PartOf=nginx.service
+
+[Service]
+ExecStart=/usr/bin/php-cgi -b /tmp/php-cgi.sock -c /etc/php.ini -e
+PIDFile=/var/run/php-cgi.pid
+Type=simple
+User=nobody
+Group=nobody
+
+[Install]
+WantedBy=multi-user.target

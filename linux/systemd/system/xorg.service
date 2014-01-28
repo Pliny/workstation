@@ -1,0 +1,25 @@
+# Notice the weird ExecStart? You need to add the following
+# to your .bashrc (or .profile, or .bash_login, or whatever)
+# This is also assuming you installed xorglogin.sh
+#
+# if [[ ${START_X11} == 1 ]]; then
+#     unset START_X11
+#     exec startx
+# fi
+#
+
+[Unit]
+Description=DSD: The X-Server
+After=systemd-user-sessions.service
+Conflicts=rescue.target
+
+[Service]
+Restart=always
+RestartSec=5
+Type=simple
+#User=dave
+#Group=users
+ExecStart=/sbin/agetty --autologin dave --login-program=/usr/local/sbin/xorglogin.sh --noclear tty1 38400
+
+[Install]
+WantedBy=graphical.target

@@ -1,0 +1,31 @@
+#
+# The backup drive's uinique ID
+#
+MY_DRIVE_UUID='325220A852207331'                # WD Passport UUID
+
+#
+# Log File
+#
+LOGPATH="/home/dave/.usbdiskmount" # Running Log file
+
+#
+# Pmount options
+#
+POPTS="-t ntfs-3g"
+
+#
+# Sound path
+#
+SNDPATH="/usr/local/share/usbdiskmount"
+
+#
+# Sound player
+# Any player that can play a wav file
+#
+SNDPLAYER="/usr/bin/mplayer -really-quiet"
+
+#
+# File containing directories/files to exclude for Media backup
+#
+MEDIA_EXCLUDE_FILE="/etc/backup/media-backup-exclude.conf"
+
