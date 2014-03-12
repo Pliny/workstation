@@ -4,12 +4,13 @@
     name = Dave Desrochers
     email = <dave726@gmail.com>
 [diff]
-    tool = opendiff
+    tool = tkdiff
 [difftool]
     prompt = false
 [alias]
     co = checkout
     ci = commit
+    up = "!git remote update -p; git merge --ff-only @{u}"
 [heroku]
     account = personal
 [color]
@@ -36,4 +37,4 @@
 [core]
     editor = /usr/bin/vim
 [push]
-	default = simple
+    default = simple
