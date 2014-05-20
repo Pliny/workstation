@@ -37,8 +37,8 @@ alias restart_guard='launchctl stop com.davesdesrochers.guard'
 alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
 alias start_guard='rm -f /tmp/guard.std*; launchctl load -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
 
-PS1='\[\e[1;32m\]\h:[\T][\!]:\w\$ >\[\e[0m\] '
-PS2='> '
+PS1='\[\e[1;32m\]\h:[\A][\!]:\w\$>\[\e[0m\] '
+PS2='. '
 export PS1 PS2
 
 export WORKON_HOME=$HOME/.virtualenvs
