@@ -39,6 +39,7 @@ alias start_guard='rm -f /tmp/guard.std*; launchctl load -w ~/Library/LaunchAgen
 
 PS1='\[\e[1;32m\]\h:[\A][\!]:\w\$>\[\e[0m\] '
 PS2='. '
+export PROMPT_DIRTRIM=3
 export PS1 PS2
 
 export WORKON_HOME=$HOME/.virtualenvs
