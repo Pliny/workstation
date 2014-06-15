@@ -23,6 +23,7 @@ PHP_CGI_SYSTEMD      := php-cgi.service
 XORG_SYSTEMD         := xorg.service
 MYTHBACKEND_SYSTEMD  := mythbackend.service
 MYTHFRONTEND_SYSTEMD := mythfrontend.service
+X11VNC_SYSTEMD       := x11vnc.service
 MYTHTV_LOGROTATE     := mythtv
 XORGLOGIN_SH         := xorglogin.sh
 
@@ -45,9 +46,9 @@ FAIL_SND                := usbdisk_fail.wav
 
 
 
-install:     install_backup   install_usbdiskmount   install_php_cgi   install_xorg   install_mythtv
+install:     install_backup   install_usbdiskmount   install_php_cgi   install_xorg   install_mythtv install_x11vnc
 
-uninstall: uninstall_backup uninstall_usbdiskmount uninstall_php_cgi uninstall_xorg uninstall_mythtv
+uninstall: uninstall_backup uninstall_usbdiskmount uninstall_php_cgi uninstall_xorg uninstall_mythtv uninstall_x11vnc
 
 
 install_backup:
@@ -102,6 +103,12 @@ install_mythtv:
 	@echo "Enabling $(MYTHFRONTEND_SYSTEMD), however you should manually start it yourself..."
 	$(SYSTEMCTL_PROGRAM) enable $(MYTHFRONTEND_SYSTEMD)
 
+install_x11vnc:
+	@$(CHK_DIR_EXISTS) $(SYSTEMD_PATH) || $(MKDIR) $(SYSTEMD_PATH)
+	$(INSTALL_CONFIG) "systemd/system/$(X11VNC_SYSTEMD)" $(SYSTEMD_PATH)
+	@echo "Starting $(X11VNC_SYSTEMD).."
+	$(SYSTEMCTL_PROGRAM) enable $(X11VNC_SYSTEMD)
+	$(SYSTEMCTL_PROGRAM) start $(X11VNC_SYSTEMD)
 
 
 uninstall_backup:
@@ -145,3 +152,9 @@ uninstall_mythtv:
 	-$(DEL_FILE) $(SYSTEMD_PATH)/$(MYTHBACKEND_SYSTEMD)
 	-$(DEL_FILE) $(SYSTEMD_PATH)/$(MYTHFRONTEND_SYSTEMD)
 	-$(DEL_FILE) $(LOGROTATE_PATH)/$(MYTHTV_LOGROTATE)
+
+uninstall_x11vnc:
+	@echo "Stopping $(X11VNC_SYSTEMD)..."
+	$(SYSTEMCTL_PROGRAM) stop $(X11VNC_SYSTEMD)
+	$(SYSTEMCTL_PROGRAM) disable $(X11VNC_SYSTEMD)
+	$(DEL_FILE)  $(SYSTEMD_PATH)/$(X11VNC_SYSTEMD)

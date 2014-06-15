@@ -1,0 +1,12 @@
+[Unit]
+Description=X11 VNC Server
+After=xorg
+
+[Service]
+ExecStart=/usr/bin/x11vnc -display :0 -rfbauth /home/dave/.vnc/passwd -rfbport 5900 -shared -forever -nowf -norc -notruecolor -bg -xkb
+Type=forking
+User=dave
+Group=users
+
+[Install]
+WantedBy=multi-user.target
