@@ -9,7 +9,7 @@ export ANDROID_HOME="/usr/share/android-sdk-macosx"
 alias h='history'
 
 # TMUX
-if [ $OS == "Linux" ]; then
+if [ $OS == "Linux" -a `id -u` != 0 ]; then
   if which tmux 2>&1 >/dev/null; then
     test -z "$TMUX" && (tmux attach || tmux new-session)
   fi
@@ -37,7 +37,15 @@ alias restart_guard='launchctl stop com.davesdesrochers.guard'
 alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
 alias start_guard='rm -f /tmp/guard.std*; launchctl load -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
 
-PS1='\[\e[1;32m\]\h:[\A][\!]:\w\$>\[\e[0m\] '
+if [ `id -u` == 0 ]; then
+  PS1_COLOR=35
+  PS1_MARK="$)"
+else
+  PS1_COLOR=32
+  PS1_MARK="$>"
+fi
+
+PS1="\\[\\e[1;${PS1_COLOR}m\\]\\u@[\\A][\\!]:\\w\\${PS1_MARK}\\[\\e[0m\\] "
 PS2='. '
 export PROMPT_DIRTRIM=3
 export PS1 PS2
