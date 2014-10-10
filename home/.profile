@@ -53,3 +53,5 @@ export PS1 PS2
 export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
+
+[ -d ~/Documents/MorseProject ] && cd ~/Documents/MorseProject
