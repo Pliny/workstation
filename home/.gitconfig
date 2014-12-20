@@ -5,12 +5,15 @@
     email = <dave726@gmail.com>
 [diff]
     tool = tkdiff
+    algorithm = patience
 [difftool]
     prompt = false
 [alias]
     co = checkout
     ci = commit
     up = "!git remote update -p; git merge --ff-only @{u}"
+    ours   = "!f() { git checkout --ours $@ && git add $@; }; f"
+    theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 [heroku]
     account = personal
 [color]
