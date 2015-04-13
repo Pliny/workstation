@@ -14,7 +14,7 @@ alias h='history'
 # TMUX
 if [ $OS == "Linux" -a `id -u` != 0 ]; then
   if which tmux 2>&1 >/dev/null; then
-    test -z "$TMUX" && (tmux attach || tmux new-session)
+    test -z "$TMUX" && (tmux attach || tmux -2 new-session)
   fi
 fi
 
@@ -27,7 +27,7 @@ fi
 alias d='git difftool'
 alias gst='git status'
 alias gbr='git branch'
-gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -$LINE --graph --pretty='%h %Cblue%an %ai %C(yellow) %s'; }
+gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -$LINE --graph --pretty='%h %Cgreen%an %ai %C(yellow) %s'; }
 
 alias tw='task'
 alias twc='task complete rc.report.complete.sort=Complete'
@@ -36,25 +36,33 @@ if [ $OS == "Linux" ]; then
   alias psc='ps xawf -eo pid,user,cgroup,args'
 fi
 
+alias lsu='ls /dev/ttyU*'
+alias msg='G_MESSAGES_DEBUG=all'
+
 Yellow="\[\033[0;33m\]"       # Yellow
 Green="\[\033[0;32m\]"        # Green
+IGreen="\[\033[0;92m\]"       # Green
+BIGreen="\[\033[1;92m\]"      # Green
 IRed="\[\033[0;91m\]"         # Red
 IBlack="\[\033[0;90m\]"       # Black
-Purple="\[\033[0;35m\]"       # Purple
+BIPurple="\[\033[1;95m\]"     # Purple
 Color_Off="\[\033[0m\]"       # Text Reset
 PathShort="\w"
-Time12h="\T"
+Time12h="\A"
 
-DEFAULT_COLOR=$Green
+DEFAULT_COLOR=$BIGreen
+
 if [ `id -u` == 0 ]; then
-  PS1_COLOR=$Purple
+  PS1_COLOR=$BIPurple
   PS1_MARK="$) "
 else
   PS1_COLOR=$DEFAULT_COLOR
   PS1_MARK="$> "
 fi
 
-export PS1=$PS1_COLOR[$Time12h]'$(
+GIT_PS1_SHOWUPSTREAM="verbose"
+
+export PS1=$IBlack[$Time12h]'$(
   if /usr/bin/git branch &>/dev/null; then
     if /usr/bin/git status | /usr/bin/grep "nothing to commit" &> /dev/null; then
       /usr/bin/echo "':$PS1_COLOR'"$(__git_ps1 "(%s)");
@@ -73,3 +81,7 @@ export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
 
 [ -d ~/Documents/MorseProject ] && cd ~/Documents/MorseProject
+
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
+
+export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
