@@ -2,6 +2,9 @@ OS=`uname`
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
+[[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
+  . /usr/share/git-core/contrib/completion/git-prompt.sh
+
 export REDISTOGO_URL='redis://localhost:6379'
 
 export ANDROID_HOME="/usr/share/android-sdk-macosx"
@@ -33,19 +36,33 @@ if [ $OS == "Linux" ]; then
   alias psc='ps xawf -eo pid,user,cgroup,args'
 fi
 
-alias restart_guard='launchctl stop com.davesdesrochers.guard'
-alias stop_guard='launchctl unload -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
-alias start_guard='rm -f /tmp/guard.std*; launchctl load -w ~/Library/LaunchAgents/com.davesdesrochers.guard.plist'
+Yellow="\[\033[0;33m\]"       # Yellow
+Green="\[\033[0;32m\]"        # Green
+IRed="\[\033[0;91m\]"         # Red
+IBlack="\[\033[0;90m\]"       # Black
+Purple="\[\033[0;35m\]"       # Purple
+Color_Off="\[\033[0m\]"       # Text Reset
+PathShort="\w"
+Time12h="\T"
 
 if [ `id -u` == 0 ]; then
-  PS1_COLOR=35
-  PS1_MARK="$)"
+  PS1_COLOR=$Purple
+  PS1_MARK="$) "
 else
-  PS1_COLOR=32
-  PS1_MARK="$>"
+  PS1_COLOR=$Green
+  PS1_MARK="$> "
 fi
 
-PS1="\\[\\e[1;${PS1_COLOR}m\\]\\u@[\\A][\\!]:\\w\\${PS1_MARK}\\[\\e[0m\\] "
+export PS1=$PS1_COLOR[$Time12h]:$Color_Off'$(
+  if /usr/bin/git branch &>/dev/null; then
+    if /usr/bin/git status | /usr/bin/grep "nothing to commit" &> /dev/null; then
+      /usr/bin/echo "'$PS1_COLOR'"$(__git_ps1 "(%s)");
+    else
+      /usr/bin/echo "'$IRed'"$(__git_ps1 "{%s}");
+    fi
+  fi
+)'$PS1_COLOR:$PathShort$PS1_MARK$Color_Off
+
 PS2='. '
 export PROMPT_DIRTRIM=3
 export PS1 PS2
