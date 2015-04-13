@@ -45,11 +45,12 @@ Color_Off="\[\033[0m\]"       # Text Reset
 PathShort="\w"
 Time12h="\T"
 
+DEFAULT_COLOR=$Green
 if [ `id -u` == 0 ]; then
   PS1_COLOR=$Purple
   PS1_MARK="$) "
 else
-  PS1_COLOR=$Green
+  PS1_COLOR=$DEFAULT_COLOR
   PS1_MARK="$> "
 fi
 
