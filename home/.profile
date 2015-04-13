@@ -53,12 +53,12 @@ else
   PS1_MARK="$> "
 fi
 
-export PS1=$PS1_COLOR[$Time12h]:$Color_Off'$(
+export PS1=$PS1_COLOR[$Time12h]'$(
   if /usr/bin/git branch &>/dev/null; then
     if /usr/bin/git status | /usr/bin/grep "nothing to commit" &> /dev/null; then
-      /usr/bin/echo "'$PS1_COLOR'"$(__git_ps1 "(%s)");
+      /usr/bin/echo "':$PS1_COLOR'"$(__git_ps1 "(%s)");
     else
-      /usr/bin/echo "'$IRed'"$(__git_ps1 "{%s}");
+      /usr/bin/echo "':$IRed'"$(__git_ps1 "{%s}");
     fi
   fi
 )'$PS1_COLOR:$PathShort$PS1_MARK$Color_Off
