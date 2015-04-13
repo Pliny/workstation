@@ -2,8 +2,13 @@ OS=`uname`
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
-[[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
-  . /usr/share/git-core/contrib/completion/git-prompt.sh
+if [ $OS == "Linux" ]; then
+  [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
+    . /usr/share/git-core/contrib/completion/git-prompt.sh
+else
+  [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
+    . /usr/local/git/contrib/completion/git-prompt.sh
+fi
 
 export REDISTOGO_URL='redis://localhost:6379'
 
@@ -63,11 +68,11 @@ fi
 GIT_PS1_SHOWUPSTREAM="verbose"
 
 export PS1=$IBlack[$Time12h]'$(
-  if /usr/bin/git branch &>/dev/null; then
-    if /usr/bin/git status | /usr/bin/grep "nothing to commit" &> /dev/null; then
-      /usr/bin/echo "':$PS1_COLOR'"$(__git_ps1 "(%s)");
+  if git branch &>/dev/null; then
+    if git status | grep "nothing to commit" &> /dev/null; then
+      echo "':$PS1_COLOR'"$(__git_ps1 "(%s)");
     else
-      /usr/bin/echo "':$IRed'"$(__git_ps1 "{%s}");
+      echo "':$IRed'"$(__git_ps1 "{%s}");
     fi
   fi
 )'$PS1_COLOR:$PathShort$PS1_MARK$Color_Off
