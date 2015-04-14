@@ -67,12 +67,12 @@ fi
 
 GIT_PS1_SHOWUPSTREAM="verbose"
 
-export PS1=$IBlack[$Time12h]'$(
+export PS1=$IBlack[$Time12h]$PS1_COLOR:'$(
   if git branch &>/dev/null; then
     if git status | grep "nothing to commit" &> /dev/null; then
-      echo "':$PS1_COLOR'"$(__git_ps1 "(%s)");
+      echo "'$PS1_COLOR'"$(__git_ps1 "(%s)");
     else
-      echo "':$IRed'"$(__git_ps1 "{%s}");
+      echo "'$IRed'"$(__git_ps1 "{%s}");
     fi
   fi
 )'$PS1_COLOR:$PathShort$PS1_MARK$Color_Off
