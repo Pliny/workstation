@@ -43,6 +43,8 @@ fi
 
 alias lsu='ls /dev/ttyU*'
 alias msg='G_MESSAGES_DEBUG=all'
+alias kmake='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
+
 
 Yellow="\[\033[0;33m\]"       # Yellow
 Green="\[\033[0;32m\]"        # Green
