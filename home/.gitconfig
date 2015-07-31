@@ -2,7 +2,7 @@
     name = Dave Desrochers
     email = <dave726@gmail.com>
 [diff]
-    tool = tkdiff
+    tool = meld
     algorithm = patience
 [difftool]
     prompt = false
