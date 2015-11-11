@@ -2,13 +2,14 @@ OS=`uname`
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
-if [ $OS == "Linux" ]; then
-  [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
-    . /usr/share/git-core/contrib/completion/git-prompt.sh
-else
-  [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
-    . /usr/local/git/contrib/completion/git-prompt.sh
-fi
+[[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
+  . /usr/share/git-core/contrib/completion/git-prompt.sh
+[[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
+  . /usr/local/git/contrib/completion/git-prompt.sh
+[[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash ]] && \
+  . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+[[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]] && \
+  . /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 
 export REDISTOGO_URL='redis://localhost:6379'
 
