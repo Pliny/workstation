@@ -70,7 +70,11 @@ fi
 
 GIT_PS1_SHOWUPSTREAM="verbose"
 
-export PS1=$IBlack[$Time12h]$PS1_COLOR:'$(
+export PS1=$IBlack[$Time12h]$'$(
+  if [ "${PROMPT_COMMAND/navdy}" != "$PROMPT_COMMAND" ]; then
+    echo "'$Color_Off'"(nenv)";
+  fi
+)'$PS1_COLOR:'$(
   if git branch &>/dev/null; then
     if git status | grep "nothing to commit" &> /dev/null; then
       echo "'$PS1_COLOR'"$(__git_ps1 "(%s)");
