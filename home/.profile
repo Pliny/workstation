@@ -96,4 +96,8 @@ export PIP_RESPECT_VIRTUALENV=true
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
-export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
+[ "$OS" = "Linux" -a -d "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin" ] && \
+  export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
+
+[ "$OS" = "Darwin" -a -d "$HOME/Library/Android/sdk/platform-tools" ] && \
+  export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
