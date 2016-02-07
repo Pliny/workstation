@@ -2,13 +2,14 @@ OS=`uname`
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 
-if [ $OS == "Linux" ]; then
-  [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
-    . /usr/share/git-core/contrib/completion/git-prompt.sh
-else
-  [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
-    . /usr/local/git/contrib/completion/git-prompt.sh
-fi
+[[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
+  . /usr/share/git-core/contrib/completion/git-prompt.sh
+[[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
+  . /usr/local/git/contrib/completion/git-prompt.sh
+[[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash ]] && \
+  . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+[[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]] && \
+  . /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 
 export REDISTOGO_URL='redis://localhost:6379'
 
@@ -69,7 +70,11 @@ fi
 
 GIT_PS1_SHOWUPSTREAM="verbose"
 
-export PS1=$IBlack[$Time12h]$PS1_COLOR:'$(
+export PS1=$IBlack[$Time12h]$'$(
+  if [ "${PROMPT_COMMAND/navdy}" != "$PROMPT_COMMAND" ]; then
+    echo "'$Color_Off'"(nenv)";
+  fi
+)'$PS1_COLOR:'$(
   if git branch &>/dev/null; then
     if git status | grep "nothing to commit" &> /dev/null; then
       echo "'$PS1_COLOR'"$(__git_ps1 "(%s)");
@@ -91,4 +96,8 @@ export PIP_RESPECT_VIRTUALENV=true
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
-export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
+[ "$OS" = "Linux" -a -d "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin" ] && \
+  export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
+
+[ "$OS" = "Darwin" -a -d "$HOME/Library/Android/sdk/platform-tools" ] && \
+  export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
