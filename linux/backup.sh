@@ -96,7 +96,7 @@ if [ $MEDIABACKUP -eq 1 ]; then
   [ -d $MEDIADIR ] || mkdir -p $MEDIADIR;
   /usr/bin/rsync -av --delete --delete-excluded --human-readable \
     --exclude-from $MEDIA_EXCLUDE_FILE \
-    /media/* $MEDDIR >> $LOG 2>&1 3>&1
+    /srv/media/* $MEDDIR >> $LOG 2>&1 3>&1
   if [ "$?" != "0" ]; then
     echo "`date`: ERROR: Could not backup Media data" >> $LOG
   fi
