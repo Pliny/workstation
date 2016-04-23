@@ -99,3 +99,6 @@ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
 [ "$OS" = "Darwin" -a -d "$HOME/Library/Android/sdk/platform-tools" ] && \
   export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+
+# added by Anaconda2 2.5.0 installer
+export PATH="/home/dave/anaconda2/bin:$PATH"
