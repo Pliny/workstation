@@ -4,12 +4,19 @@ OS=`uname`
 
 [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]] && \
   . /usr/share/git-core/contrib/completion/git-prompt.sh
+
 [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]] && \
   . /usr/local/git/contrib/completion/git-prompt.sh
+
 [[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash ]] && \
   . /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
 [[ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]] && \
   . /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
+
+[[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh ]] && \
+  . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
+[[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ]] && \
+  . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
 
 export REDISTOGO_URL='redis://localhost:6379'
 
@@ -45,6 +52,8 @@ fi
 alias lsu='ls /dev/ttyU*'
 alias msg='G_MESSAGES_DEBUG=all'
 alias kmake='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
+alias adbshell='adb wait-for-device; adb shell'
+alias awssync='aws s3 sync s3://navdy-manufacturing/foxconn .'
 
 
 Yellow="\[\033[0;33m\]"       # Yellow
@@ -99,3 +108,6 @@ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
 [ "$OS" = "Darwin" -a -d "$HOME/Library/Android/sdk/platform-tools" ] && \
   export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+
+# added by Anaconda2 4.0.0 installer
+export PATH="$HOME/anaconda2/bin:$PATH"
