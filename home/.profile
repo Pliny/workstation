@@ -84,6 +84,16 @@ export PS1=$IBlack[$Time12h]$'$(
   fi
 )'$PS1_COLOR:$PathShort$PS1_MARK$Color_Off
 
+function add_to_path_maybe()
+{
+  local requested_OS=$1
+  local newpath=$2
+
+  [ "$OS" = "$requested_OS" -a -d $newpath ] && \
+    ! $(echo $PATH | grep -q $newpath) && \
+    export PATH="${newpath}${PATH+:}${PATH}"
+}
+
 PS2='. '
 export PROMPT_DIRTRIM=3
 export PS1 PS2
@@ -94,11 +104,9 @@ export PIP_RESPECT_VIRTUALENV=true
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
-[ "$OS" = "Linux" -a -d "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin" ] && \
-  export PATH="/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin/:$PATH"
+add_to_path_maybe "Linux" "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin"
 
-[ "$OS" = "Darwin" -a -d "$HOME/Library/Android/sdk/platform-tools" ] && \
-  export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
+add_to_path_maybe "Darwin" "$HOME/Library/Android/sdk/platform-tools" 
 
-# added by Anaconda2 2.5.0 installer
-export PATH="/home/dave/anaconda2/bin:$PATH"
+add_to_path_maybe "Linux" "/home/dave/Documents/enso-files/SimplicityStudio_v4/developer/stacks/ble/v2.1.1.0/protocol/bluetooth_2.1/bin"
+
