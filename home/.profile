@@ -18,10 +18,6 @@ OS=`uname`
 [[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ]] && \
   . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
 
-export REDISTOGO_URL='redis://localhost:6379'
-
-export ANDROID_HOME="/usr/share/android-sdk-macosx"
-
 alias h='history'
 
 # TMUX
@@ -106,10 +102,6 @@ function add_to_path_maybe()
 PS2='. '
 export PROMPT_DIRTRIM=3
 export PS1 PS2
-
-export WORKON_HOME=$HOME/.virtualenvs
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
-export PIP_RESPECT_VIRTUALENV=true
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
