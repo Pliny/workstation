@@ -1,6 +1,6 @@
 [user]
     name = Dave Desrochers
-    email = <dave726@gmail.com>
+    email = <dave@intercreate.io>
 [diff]
     tool = meld
     algorithm = patience
