@@ -37,9 +37,11 @@ alias d='git difftool'
 alias gst='git status'
 alias gbr='git branch'
 gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -$LINE --graph --pretty='%h %Cgreen%an %ai %C(yellow) %s'; }
+ec2fetchimg() { if [ $1 ]; then image=`echo $1`; else image=`echo '*.{img.imx}'`; fi; outdir=$(mktemp -d); scp ${ec2}:/home/ubuntu/aosp/out/target/product/apollo/${image} ${outdir} && echo ${outdir}/${image}; }
 
 alias tw='task'
 alias twc='task complete rc.report.complete.sort=Complete'
+function twp() { task project:${1}; }
 
 if [ $OS == "Linux" ]; then
   alias psc='ps xawf -eo pid,user,cgroup,args'
@@ -50,6 +52,9 @@ alias msg='G_MESSAGES_DEBUG=all'
 alias kmake='make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-'
 alias adbshell='adb wait-for-device; adb shell'
 alias awssync='aws s3 sync s3://navdy-manufacturing/foxconn .'
+
+alias fast-ble="sudo hcitool lecup --handle \`hcitool conn | tail -1 | awk '{print \$5}'\` --min=8 --max=8 --latency=0 --timeout=500"
+alias wc="watch -n1 -d ccache -s"
 
 
 Yellow="\[\033[0;33m\]"       # Yellow
@@ -109,5 +114,8 @@ add_to_path_maybe "Linux" "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130
 
 add_to_path_maybe "Darwin" "$HOME/Library/Android/sdk/platform-tools" 
 
-add_to_path_maybe "Linux" "/home/dave/Documents/enso-files/SimplicityStudio_v4/developer/stacks/ble/v2.1.1.0/protocol/bluetooth_2.1/bin"
+export USE_CCACHE=1
 
+# For Beaconhome
+export ec2='ec2-52-43-38-248.us-west-2.compute.amazonaws.com'
+alias ec2login="ssh ${ec2}"
