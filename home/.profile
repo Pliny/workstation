@@ -54,7 +54,8 @@ alias adbshell='adb wait-for-device; adb shell'
 alias awssync='aws s3 sync s3://navdy-manufacturing/foxconn .'
 
 alias fast-ble="sudo hcitool lecup --handle \`hcitool conn | tail -1 | awk '{print \$5}'\` --min=8 --max=8 --latency=0 --timeout=500"
-alias wc="watch -n1 -d ccache -s"
+alias wccache="watch -n1 -d ccache -s"
+alias r='fc -s'
 
 
 Yellow="\[\033[0;33m\]"       # Yellow
