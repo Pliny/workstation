@@ -33,6 +33,9 @@ else
   alias ls='ls -G'
 fi
 
+alias mi='make install'
+alias mc='make clean'
+alias mm='make'
 alias d='git difftool'
 alias gst='git status'
 alias gbr='git branch'
@@ -111,12 +114,13 @@ export PS1 PS2
 
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
 
-add_to_path_maybe "Linux" "/opt/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin"
-
 add_to_path_maybe "Darwin" "$HOME/Library/Android/sdk/platform-tools" 
+add_to_path_maybe "Linux" "$HOME/.local/bin"
 
 export USE_CCACHE=1
 
+export ZEPHYR_TOOLCHAIN_VARIANT="zephyr"
+export ZEPHYR_SDK_INSTALL_DIR="/home/dave/Documents/zephyr-files/zephyr-sdk-0.10.3"
 # For Beaconhome
 export ec2='ec2-52-43-38-248.us-west-2.compute.amazonaws.com'
 alias ec2login="ssh ${ec2}"
