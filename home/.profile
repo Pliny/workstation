@@ -39,6 +39,10 @@ alias mm='make'
 alias d='git difftool'
 alias gst='git status'
 alias gbr='git branch'
+alias wb='west build'
+alias wf='west flash --flash-opt="-e=chip"'
+alias wa='west attach'
+alias wd='west debug --flash-opt="-e=chip"'
 gl() { if [ $1 ]; then LINE=`echo $1 | sed 's/-//'`; else LINE=16; fi; git log -$LINE --graph --pretty='%h %Cgreen%an %ai %C(yellow) %s'; }
 ec2fetchimg() { if [ $1 ]; then image=`echo $1`; else image=`echo '*.{img.imx}'`; fi; outdir=$(mktemp -d); scp ${ec2}:/home/ubuntu/aosp/out/target/product/apollo/${image} ${outdir} && echo ${outdir}/${image}; }
 
@@ -119,8 +123,6 @@ add_to_path_maybe "Linux" "$HOME/.local/bin"
 
 export USE_CCACHE=1
 
-export ZEPHYR_TOOLCHAIN_VARIANT="zephyr"
-export ZEPHYR_SDK_INSTALL_DIR="/home/dave/Documents/zephyr-files/zephyr-sdk-0.10.3"
 # For Beaconhome
 export ec2='ec2-52-43-38-248.us-west-2.compute.amazonaws.com'
 alias ec2login="ssh ${ec2}"
